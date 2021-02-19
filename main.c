@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "graph.h"
-#include "file.h"
-/**
+/** Projeto 1 - TAG TA
  * Autor: Gustavo Rodrigues dos Santos 
  * Matricula: 19/0014121
  * Materia: Teoria e Aplicaçao de Grafos - Turma A
@@ -10,20 +6,25 @@
  * Data: 04/03/2021
  */
 
-int main() {/*
-    readFile();
-    */
-    Graph* graph = createGraph(4);
-    addEdge(graph, 0, 1);
-    addEdge(graph, 0, 2);
-    addEdge(graph, 0, 3);
-    addEdge(graph, 0, 3);
-    addEdge(graph, 1, 2);/*
-    addEdge(graph, 1, 0);
-    addEdge(graph, 2, 0);
-    addEdge(graph, 3, 0);*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include "graph.h"
+#include "file.h"
+#include "bron-kerbosch.h"
+int main() {
+    Graph* graph = createGraph(62);
+    int a, b;
+    // Le os dados do arquivo e adiciona ao grafo
+    FILE* file = readFile();
+    while(fscanf(file, "%d %d", &a, &b) != EOF) {
+        addEdge(graph, a, b);
+    }
+    closeFile(file);        // fecha o arquivo
 
-    printGraph(graph);
+    bronKerbosch(graph, 2);
+    
+    //printGraph(graph);
 
     destroyGraph(graph);
     return 0;
