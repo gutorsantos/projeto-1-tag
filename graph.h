@@ -1,9 +1,9 @@
-typedef struct{
+typedef struct Graph{
     int numVertices;
     struct Node **adjLists;
 } Graph;
 
-typedef struct {
+typedef struct Node{
     int vertex;
     struct Node *next;
 } Node;
@@ -26,7 +26,7 @@ Node* createNode(int v) {
 Graph* createGraph(int vertices) {
     Graph* graph = (Graph*) malloc(sizeof(Graph));
     graph->numVertices = vertices;
-    graph->adjLists = (Node*) malloc(vertices * sizeof(Node*));
+    graph->adjLists = (Node**) malloc(vertices * sizeof(Node*));
     
     int i;
     for(i = 0; i < vertices; i++) {
@@ -76,16 +76,16 @@ void addEdge(Graph* graph, int v, int w) {
  * Realiza-se a impressão da lista de adjacencia na tela
  */
 void printGraph(Graph* graph) {
-  int v;
-  for (v = 0; v < graph->numVertices; v++) {
+    int v;
+    for (v = 0; v < graph->numVertices; v++) {
     Node* temp = graph->adjLists[v];
     printf("\n%d: ", v);
     while (temp) {
-      printf("%d -> ", temp->vertex);
-      temp = temp->next;
+        printf("%d -> ", temp->vertex);
+        temp = temp->next;
     }
     printf("\n");
-  }
+    }
 }
 
 /**
@@ -126,4 +126,15 @@ void destroyGraph(Graph* graph) {
     }
 
     free(graph);
+}
+
+Node* neighborSet(Graph* graph, int v) {
+    /*Node* temp = graph->adjLists[v];
+    
+    printf("\n%d: ", v);
+    while (temp) {
+        printf("%d -> ", temp->vertex);
+        temp = temp->next;
+    }*/
+    return graph->adjLists[v];
 }

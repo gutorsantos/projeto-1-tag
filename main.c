@@ -12,8 +12,9 @@
 #include "graph.h"
 #include "file.h"
 #include "bron-kerbosch.h"
+
 int main() {
-    Graph* graph = createGraph(62);
+    Graph* graph = createGraph(63);
     int a, b;
     // Le os dados do arquivo e adiciona ao grafo
     FILE* file = readFile();
@@ -22,7 +23,9 @@ int main() {
     }
     closeFile(file);        // fecha o arquivo
 
-    bronKerbosch(graph, 2);
+//    neighborSet(graph, 2);
+
+    findingCliques(graph);
     
     //printGraph(graph);
 
