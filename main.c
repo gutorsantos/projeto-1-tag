@@ -23,11 +23,10 @@ int main() {
     }
     closeFile(file);        // fecha o arquivo
 
-//    neighborSet(graph, 2);
+    printGraph(graph);
 
-    findingCliques(graph);
+    findingCliques(graph, 0);
     
-    //printGraph(graph);
 
     destroyGraph(graph);
     return 0;

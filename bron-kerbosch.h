@@ -12,6 +12,7 @@ int searchVertexSet(Node* n, int v) {
         if(t->vertex == v) {
             return 1;
         }
+        t = t->next;
     }
     return 0;
 }
@@ -21,12 +22,10 @@ Node* RUnionV(Node* R, int v) {
     if(r == NULL) {
         r = createNode(v);
     }else {
-        while(r->next != NULL) {
-            r = r->next;
-        }
-        r->next = createNode(v);
+        Node* t = createNode(v);
+        t->next = r;
+        r = t;
     }
-    printNode(r);
     return r;
 
 }
@@ -36,12 +35,10 @@ Node* XUnionV(Node* X, int v) {
     if(x == NULL) {
         x = createNode(v);
     }else {
-        while(x->next != NULL) {
-            x = x->next;
-        }
-        x->next = createNode(v);
+        Node* t = createNode(v);
+        t->next = x;
+        x = t;
     }
-    printNode(x);
     return x;
 
 }
@@ -51,11 +48,11 @@ Node* PIntersectNv(Node* P, Node* neighbors) {
     Node* newSet = NULL;
     while(p != NULL) {
         if(searchVertexSet(neighbors, p->vertex)) {
-            while(newSet->next != NULL) {
-                newSet = newSet->next;
-            }
-            newSet->next = createNode(p->vertex);
+            Node* t = createNode(p->vertex);
+            t->next = newSet;
+            newSet = t;
         }
+        p = p->next;
     }
     return newSet;
 }
@@ -65,11 +62,11 @@ Node* XIntersectNv(Node* X, Node* neighbors) {
     Node* newSet = NULL;
     while(x != NULL) {
         if(searchVertexSet(neighbors, x->vertex)) {
-            while(newSet->next != NULL) {
-                newSet = newSet->next;
-            }
-            newSet->next = createNode(x->vertex);
+            Node* t = createNode(x->vertex);
+            t->next = newSet;
+            newSet = t;
         }
+        x = x->next;
     }
     return newSet;
 }
@@ -105,14 +102,24 @@ void destroyList(Node* n) {
 }
 
 void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
+    printf("R: ");
+    printNode(R);
+    printf("\n");
+    printf("P: ");
+    printNode(P);
+    printf("\n");
+    printf("X: ");
+    printNode(X);
+    printf("\n\n\n");
+
     if(P == NULL && X == NULL) {
         printf("Clique maximal achado:\n");
         printNode(R);
         return;
     }
     Node* p = P;
-    printf()
     while(p != NULL) {
+        printf("VERTICE: %d\n", p->vertex);
         BKv1(graph, RUnionV(R, p->vertex), PIntersectNv(P, neighborSet(graph, p->vertex)), XIntersectNv(X, neighborSet(graph, p->vertex)));
         P = removeVertexNode(P, p->vertex);
         X = XUnionV(X, p->vertex);
@@ -120,7 +127,7 @@ void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
     }
 }
 
-void findingCliques(Graph* graph) {
+void findingCliques(Graph* graph, int pivot) {
     Node* R = NULL;
     Node* P = NULL;
     Node* X = NULL;
@@ -131,8 +138,12 @@ void findingCliques(Graph* graph) {
         P = n;
     }
     
-    //printNode(P);
-    BKv1(graph, R, P, X);
+    if(pivot) {
+        //BKv2(graph, R, P, X);
+    }else {
+        BKv1(graph, R, P, X);
+    }
+    
     destroyList(R);
     destroyList(P);
     destroyList(X);
