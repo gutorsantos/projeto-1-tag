@@ -128,6 +128,9 @@ void destroyGraph(Graph* graph) {
     free(graph);
 }
 
+/**
+ * Retorna os vertices adjacentes de um vertice dado v
+ */
 Node* neighborSet(Graph* graph, int v) {
     /*Node* temp = graph->adjLists[v];
     
