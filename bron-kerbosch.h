@@ -21,11 +21,7 @@ int searchVertexSet(Node* n, int v) {
     return 0;
 }
 
-/**
- * Realiza-se a uniao entre o conjunto R e conjunto
- * unitario {v}
- */
-Node* RUnionV(Node* R, int v) {
+/*Node* RUnionV(Node* R, int v) {
     Node* r = R;
     if(r == NULL) {
         r = createNode(v);
@@ -35,12 +31,32 @@ Node* RUnionV(Node* R, int v) {
         r = t;
     }
     return r;
-}
+}*/
 
 /**
- * Realiza-se a uniao entre o conjunto X e conjunto
+ * Realiza-se a uniao entre o conjunto R e conjunto
  * unitario {v}
  */
+Node* RUnionV(Node* R, int v) {
+    Node* r = R;
+    Node* newSet = NULL;
+    if(r == NULL) {
+        newSet = createNode(v);
+    }else {
+        while(r != NULL) {
+            Node* t = createNode(r->vertex);
+            t->next = newSet;
+            newSet = t;
+            r = r->next;
+        }
+        Node* t = createNode(v);
+        t->next = newSet;
+        newSet = t;
+    }
+    return newSet;
+}
+
+/*
 Node* XUnionV(Node* X, int v) {
     Node* x = X;
     if(x == NULL) {
@@ -51,7 +67,50 @@ Node* XUnionV(Node* X, int v) {
         x = t;
     }
     return x;
+}*/
+
+/**
+ * Realiza-se a uniao entre o conjunto X e conjunto
+ * unitario {v}
+ */
+Node* XUnionV(Node* X, int v) {
+    Node* x = X;
+    Node* newSet = NULL;
+    if(x == NULL) {
+        newSet = createNode(v);
+    }else {
+        while(x != NULL) {
+            Node* t = createNode(x->vertex);
+            t->next = newSet;
+            newSet = t;
+            x = x->next;
+        }
+        Node* t = createNode(v);
+        t->next = newSet;
+        newSet = t;
+    }
+    return newSet;
 }
+
+/*
+Node* PUnionX(Node* P, Node* X) {
+    Node* p = P;
+    Node* newSet = NULL;
+
+    while(p != NULL) {
+        if(searchVertexSet(X, p->vertex)) {
+            Node* t = createNode(p->vertex);
+            t->next = newSet;
+            newSet = t;
+        }else {
+            Node* t = createNode(p->vertex);
+            t->next = newSet;
+            newSet = t;
+        }
+        p = p->next;
+    }
+    return p;
+}*/
 
 /**
  * Realiza-se a uniao entre o conjunto X e conjunto
@@ -73,7 +132,7 @@ Node* PUnionX(Node* P, Node* X) {
         }
         p = p->next;
     }
-    return p;
+    return newSet;
 }
 
 /**
@@ -117,23 +176,35 @@ Node* XIntersectNv(Node* X, Node* neighbors) {
  */
 Node* removeVertexNode(Node* P, int v) {
     Node* p = P;
+    Node* newSet =  NULL;
     Node* prev = NULL;
-    Node* next = NULL;
+
+    if(P == NULL) {
+        newSet = NULL;
+    }
+
+    while(p != NULL) {
+        Node* t = createNode(p->vertex);
+        t->next = newSet;
+        newSet = t;
+        p = p->next;
+    }
+    p = newSet;
     while(p != NULL && p->vertex != v) {
         prev = p;
         p = p->next;
     }
     if(p == NULL)
-        return P;
+        return newSet;
 
     if( prev == NULL) {
-        P = p->next;
+        newSet = p->next;
     }else {
         prev->next = p->next;
     }
 
     free(p);
-    return P;
+    return newSet;
 }
 
 /**
@@ -150,7 +221,7 @@ void destroyList(Node* n) {
     }
 }
 
-void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
+/*void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
     printf("\n\n\n");
     printf("R: ");
     printNode(R);
@@ -174,7 +245,7 @@ void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
         X = XUnionV(X, p->vertex);
         p = p->next;
     }
-    /* Print da volta da recursividade*/
+    Print da volta da recursividade
     printf("\n\n\n");
     printf("R: ");
     printNode(R);
@@ -187,6 +258,27 @@ void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
     printf("\n\n\n");
 
     return;
+}*/
+
+void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
+    //printf("entrei ");
+    if(P == NULL && X == NULL) {
+        printf("Clique maximal achado:\n");
+        printNode(R);
+        printf("\n");
+        return;
+    }
+    Node* p = P;
+    while(p != NULL) {
+        Node* newR = RUnionV(R, p->vertex);
+        Node* newP = PIntersectNv(P, neighborSet(graph, p->vertex));
+        Node* newX = XIntersectNv(X, neighborSet(graph, p->vertex));
+
+        BKv1(graph, newR, newP, newX);
+        P = removeVertexNode(P, p->vertex);
+        X = XUnionV(X, p->vertex);
+        p = p->next;
+    }
 }
 
 /*
