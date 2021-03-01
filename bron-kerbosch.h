@@ -275,57 +275,37 @@ void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
         Node* newX = XIntersectNv(X, neighborSet(graph, p->vertex));
 
         BKv1(graph, newR, newP, newX);
+
         P = removeVertexNode(P, p->vertex);
         X = XUnionV(X, p->vertex);
         p = p->next;
     }
 }
 
-/*
-void BKv2(Graph* graph, Node* R, Node* P, Node* X) {
-    printf("\n\n\n");
-    printf("R: ");
-    printNode(R);
-    printf("\n");
-    printf("P: ");
-    printNode(P);
-    printf("\n");
-    printf("X: ");
-    printNode(X);
-    printf("\n\n\n");
 
+void BKv2(Graph* graph, Node* R, Node* P, Node* X) {
     if(P == NULL && X == NULL) {
         printf("Clique maximal achado:\n");
         printNode(R);
+        printf("\n");
         return;
     }
     // Node* p = P;
 
     Node* pivot_list = PUnionX(P, X);
-    // selecionar nessa lista os pivos com maiores graus 
 
-        // P \ N(u)
-    while(removeVertexNode(pivot_list, pivot->vertex) != NULL) {
-        printf("VERTICE: %d\n", p->vertex);
-        BKv1(graph, RUnionV(R, p->vertex), PIntersectNv(P, neighborSet(graph, p->vertex)), XIntersectNv(X, neighborSet(graph, p->vertex)));
-        P = removeVertexNode(P, p->vertex);
-        X = XUnionV(X, p->vertex);
-        p = p->next;
+    while(pivot_list != NULL) {
+        Node* newR = RUnionV(R, pivot_list->vertex);
+        Node* newP = PIntersectNv(P, neighborSet(graph, pivot_list->vertex));
+        Node* newX = XIntersectNv(X, neighborSet(graph, pivot_list->vertex));
+        
+        BKv2(graph, newR, newP, newX);
+        
+        P = removeVertexNode(P, pivot_list->vertex);
+        X = XUnionV(X, pivot_list->vertex);
+        pivot_list = pivot_list->next;
     }
-    /* Print da volta da recursividade
-    printf("\n\n\n");
-    printf("R: ");
-    printNode(R);
-    printf("\n");
-    printf("P: ");
-    printNode(P);
-    printf("\n");
-    printf("X: ");
-    printNode(X);
-    printf("\n\n\n");
-
-    return;
-}*/
+}
 
 void findingCliques(Graph* graph, int pivot) {
     Node* R = NULL;
@@ -339,7 +319,7 @@ void findingCliques(Graph* graph, int pivot) {
     }
     
     if(pivot) {
-        //BKv2(graph, R, P, X);
+        BKv2(graph, R, P, X);
     }else {
         BKv1(graph, R, P, X);
     }

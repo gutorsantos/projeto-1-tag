@@ -141,3 +141,33 @@ Node* neighborSet(Graph* graph, int v) {
     }*/
     return graph->adjLists[v];
 }
+
+int getListSize(Node* list) {
+    Node* l = list;
+    if(l == NULL) {
+        return 0;
+    }
+    int size = 1;
+    while(l->next != NULL) {
+        size++;
+        l = l->next;
+    }
+    printf("%d", size);
+    return size;
+}
+
+double clusteringCoefficient(Graph* graph) {
+    int numVertices = graph->numVertices;
+    double nodeCoeffs[numVertices];
+    double summation = 0;
+    double C = 0;
+
+    for(int i = 1; i < numVertices; i++) {
+        nodeCoeffs[i] = 2 * t / (getListSize(graph->adjLists[i]) * (getListSize(graph->adjLists[i])-1));
+        summation += nodeCoeffs[i];
+    }
+
+    C = 1 / (numVertices * summation);
+
+    return C;
+}

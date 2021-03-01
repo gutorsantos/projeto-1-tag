@@ -25,9 +25,11 @@ int main() {
 
     printGraph(graph);
 
-    findingCliques(graph, 0);
+    /*
+    findingCliques(graph, 1);
+    */
+    clusteringCoefficient(graph);
     
-
     destroyGraph(graph);
     return 0;
 }
