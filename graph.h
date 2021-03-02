@@ -78,13 +78,13 @@ void addEdge(Graph* graph, int v, int w) {
 void printGraph(Graph* graph) {
     int v;
     for (v = 0; v < graph->numVertices; v++) {
-    Node* temp = graph->adjLists[v];
-    printf("\n%d: ", v);
-    while (temp) {
-        printf("%d -> ", temp->vertex);
-        temp = temp->next;
-    }
-    printf("\n");
+        Node* temp = graph->adjLists[v];
+        printf("\n%d: ", v);
+        while (temp) {
+            printf("%d -> ", temp->vertex);
+            temp = temp->next;
+        }
+        printf("\n");
     }
 }
 
@@ -132,13 +132,6 @@ void destroyGraph(Graph* graph) {
  * Retorna os vertices adjacentes de um vertice dado v
  */
 Node* neighborSet(Graph* graph, int v) {
-    /*Node* temp = graph->adjLists[v];
-    
-    printf("\n%d: ", v);
-    while (temp) {
-        printf("%d -> ", temp->vertex);
-        temp = temp->next;
-    }*/
     return graph->adjLists[v];
 }
 
@@ -152,8 +145,25 @@ int getListSize(Node* list) {
         size++;
         l = l->next;
     }
-    printf("%d", size);
+    //printf("%d", size);
     return size;
+}
+
+int visited[63];
+int DFS(Graph* graph, Node** list, int i) {
+    int ti = 0;
+    Node* p = list[i];
+    while( p != NULL) {
+        Node* tmp = p->next;
+        while(tmp != NULL) {
+            if(searchVertex(graph, p->vertex, tmp->vertex)) {
+                ti++;
+            }
+            tmp = tmp->next;
+        }
+        p = p->next;
+    }
+    return ti;
 }
 
 double clusteringCoefficient(Graph* graph) {
@@ -163,11 +173,14 @@ double clusteringCoefficient(Graph* graph) {
     double C = 0;
 
     for(int i = 1; i < numVertices; i++) {
-        nodeCoeffs[i] = 2 * t / (getListSize(graph->adjLists[i]) * (getListSize(graph->adjLists[i])-1));
+        int t = DFS(graph, graph->adjLists, i);
+        if((getListSize(graph->adjLists[i])-1) > 1 ) {
+            nodeCoeffs[i] = (double) 2 * t / (getListSize(graph->adjLists[i]) * (getListSize(graph->adjLists[i])-1));
+        }
         summation += nodeCoeffs[i];
     }
 
-    C = 1 / (numVertices * summation);
+    C = (double) (1.0 / numVertices) * summation;
 
     return C;
 }

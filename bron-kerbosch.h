@@ -261,11 +261,9 @@ void destroyList(Node* n) {
 }*/
 
 void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
-    //printf("entrei ");
     if(P == NULL && X == NULL) {
-        printf("Clique maximal achado:\n");
+        printf("\n\t|- Clique maximal achado: ");
         printNode(R);
-        printf("\n");
         return;
     }
     Node* p = P;
@@ -285,9 +283,8 @@ void BKv1(Graph* graph, Node* R, Node* P, Node* X) {
 
 void BKv2(Graph* graph, Node* R, Node* P, Node* X) {
     if(P == NULL && X == NULL) {
-        printf("Clique maximal achado:\n");
+        printf("\n\t|- Clique maximal achado: ");
         printNode(R);
-        printf("\n");
         return;
     }
     // Node* p = P;

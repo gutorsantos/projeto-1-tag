@@ -2,7 +2,7 @@
  * Autor: Gustavo Rodrigues dos Santos 
  * Matricula: 19/0014121
  * Materia: Teoria e Aplicaçao de Grafos - Turma A
- * Ano: 2021 - 1o semestre
+ * Ano: 2020 - 2o semestre 
  * Data: 04/03/2021
  */
 
@@ -16,6 +16,7 @@
 int main() {
     Graph* graph = createGraph(63);
     int a, b;
+
     // Le os dados do arquivo e adiciona ao grafo
     FILE* file = readFile();
     while(fscanf(file, "%d %d", &a, &b) != EOF) {
@@ -23,13 +24,19 @@ int main() {
     }
     closeFile(file);        // fecha o arquivo
 
-    printGraph(graph);
-
     /*
+    printf("Lista de Adjacencia do Grafo");
+    printGraph(graph);*/
+
+    printf("+ Bron-Kerbosch sem pivotamento");
+    findingCliques(graph, 0);
+    printf("\n\n");
+    printf("+ Bron-Kerbosch com pivotamento");
     findingCliques(graph, 1);
-    */
-    clusteringCoefficient(graph);
-    
+
+    printf("\n\n");
+    printf("\nCoeficiente de Aglomeracao do Grafo: %.10lf",clusteringCoefficient(graph));
+
     destroyGraph(graph);
     return 0;
 }
