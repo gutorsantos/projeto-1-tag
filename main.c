@@ -24,7 +24,7 @@ int main() {
     }
     closeFile(file);        // fecha o arquivo
 
-    /*
+    /* 
     printf("Lista de Adjacencia do Grafo");
     printGraph(graph);*/
 
@@ -35,8 +35,9 @@ int main() {
     findingCliques(graph, 1);
 
     printf("\n\n");
-    printf("\nCoeficiente de Aglomeracao do Grafo: %.10lf",clusteringCoefficient(graph));
+    printf("\nCoeficiente de Aglomeracao do Grafo: %lf",clusteringCoefficient(graph));
 
+    printf("\n\n");
     destroyGraph(graph);
     return 0;
 }
