@@ -148,9 +148,11 @@ int getListSize(Node* list) {
     //printf("%d", size);
     return size;
 }
-
-int visited[63];
-int DFS(Graph* graph, Node** list, int i) {
+/**
+ * Encontra a quantidade de arestas que formam triangulos
+ * e realmente estão presentes no grafo
+*/
+int getTriangles(Graph* graph, Node** list, int i) {
     int ti = 0;
     Node* p = list[i];
     while( p != NULL) {
@@ -173,7 +175,7 @@ double clusteringCoefficient(Graph* graph) {
     double C = 0;
 
     for(int i = 1; i < numVertices; i++) {
-        int t = DFS(graph, graph->adjLists, i);
+        int t = getTriangles(graph, graph->adjLists, i);
         if((getListSize(graph->adjLists[i])-1) > 1 ) {
             nodeCoeffs[i] = (double) 2 * t / (getListSize(graph->adjLists[i]) * (getListSize(graph->adjLists[i])-1));
         }
